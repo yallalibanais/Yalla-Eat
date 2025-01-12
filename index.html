@@ -113,18 +113,38 @@
             commandeDiv.appendChild(totalDiv);
         }
 
-        // Passer la commande
         function passerCommande() {
-            if (commande.length === 0) {
-                alert("Votre commande est vide.");
-                return;
-            }
+    if (commande.length === 0) {
+        alert("Votre commande est vide.");
+        return;
+    }
+
+    // URL de l'application Apps Script
+    const url = "https://script.google.com/macros/s/AKfycbxHgtx1yJF4-K1oJomAer5GN4GpDiS0TypmO6hNlslTtpesqfwx83_slvMMTPg88Sojag/exec";
+
+    // Envoyer les données à Google Sheets
+    fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ commande: commande })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === "success") {
             alert("Commande passée avec succès !");
-            console.log("Commande :", commande);
-            // Envoyer la commande au serveur (à implémenter)
-            commande = []; // Réinitialiser la commande
-            afficherCommande(); // Mettre à jour l'affichage
+        } else {
+            alert("Erreur : " + data.message);
         }
+        commande = []; // Réinitialiser la commande
+        afficherCommande(); // Mettre à jour l’affichage
+    })
+    .catch(error => {
+        alert("Une erreur s'est produite : " + error.message);
+    });
+}
+
     </script>
 </body>
 </html>
