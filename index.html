@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commande Yalla Eat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            color: #4CAF50;
+        }
+        .menu-item {
+            margin: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fff;
+            display: inline-block;
+            width: 200px;
+        }
+        .menu-item button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .menu-item button:hover {
+            background-color: #45a049;
+        }
+        #commande-resume {
+            margin-top: 30px;
+            text-align: left;
+            display: inline-block;
+        }
+        .commande-item {
+            margin: 10px 0;
+        }
+        .total {
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bienvenue chez Yalla Eat</h1>
+    <p>Sélectionnez vos plats pour passer commande.</p>
+
+    <div id="menu">
+        <!-- Les plats seront affichés ici -->
+    </div>
+
+    <h2>Résumé de votre commande</h2>
+    <div id="commande-resume">
+        <!-- Résumé de commande affiché ici -->
+    </div>
+    <button onclick="passerCommande()">Passer la commande</button>
+
+    <script>
+        // Menu initial
+        const menu = [
+            { id: 1, nom: "Bowl Falafel", prix: 8.5 },
+            { id: 2, nom: "Bowl Poulet", prix: 9.5 },
+            { id: 3, nom: "Salade Libanaise", prix: 7.0 }
+        ];
+
+        let commande = [];
+
+        // Affichage du menu
+        const menuDiv = document.getElementById("menu");
+        menu.forEach(item => {
+            const div = document.createElement("div");
+            div.className = "menu-item";
+            div.innerHTML = `
+                <h3>${item.nom}</h3>
+                <p>Prix : ${item.prix} €</p>
+                <button onclick="ajouterCommande(${item.id})">Ajouter</button>
+            `;
+            menuDiv.appendChild(div);
+        });
+
+        // Ajouter un item à la commande
+        function ajouterCommande(id) {
+            const item = menu.find(m => m.id === id);
+            commande.push(item);
+            afficherCommande();
+        }
+
+        // Afficher le résumé de commande
+        function afficherCommande() {
+            const commandeDiv = document.getElementById("commande-resume");
+            commandeDiv.innerHTML = ""; // Vider l'affichage précédent
+
+            let total = 0;
+
+            commande.forEach(item => {
+                total += item.prix;
+                const div = document.createElement("div");
+                div.className = "commande-item";
+                div.textContent = `${item.nom} - ${item.prix} €`;
+                commandeDiv.appendChild(div);
+            });
+
+            const totalDiv = document.createElement("div");
+            totalDiv.className = "total";
+            totalDiv.textContent = `Total : ${total.toFixed(2)} €`;
+            commandeDiv.appendChild(totalDiv);
+        }
+
+        // Passer la commande
+        function passerCommande() {
+            if (commande.length === 0) {
+                alert("Votre commande est vide.");
+                return;
+            }
+            alert("Commande passée avec succès !");
+            console.log("Commande :", commande);
+            // Envoyer la commande au serveur (à implémenter)
+            commande = []; // Réinitialiser la commande
+            afficherCommande(); // Mettre à jour l'affichage
+        }
+    </script>
+</body>
+</html>
